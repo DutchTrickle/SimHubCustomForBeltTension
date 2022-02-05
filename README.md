@@ -14,3 +14,6 @@ Servo's used: https://www.tinytronics.nl/shop/en/mechanics-and-actuators/motors/
 STL files for mount on 80x40 aluminium extrusion profile.
 
 See in use here: https://www.youtube.com/watch?v=L4EWORSBIkU 
+
+How to wire:
+![Wiring Scheme](https://user-images.githubusercontent.com/17800628/152642218-f0a80a50-8eee-4607-be6a-57bb9d99189c.png)
