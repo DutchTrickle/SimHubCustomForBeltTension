@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#include <Servo.h>
+#include <Servo.h> //include arduino servo library
 
 
 
@@ -41,10 +41,9 @@ public:
 	
 	Servo servo1;  // create servo object to control a servo
 	Servo servo2;  // create servo object to control a servo
-	int Acc; // g forces from game
 	int angle; //output angle of servo
-	float GFloat;
-    int GFint;
+	float GFloat; // gforces in floating point
+    	int GFint; //gforces in integer
 	
 	void setup() {
 		
@@ -61,18 +60,20 @@ public:
 		String message = FlowSerialReadStringUntil('\n');
 		FlowSerialDebugPrintLn("Message_received: " + message);
 		
-		Acc = message.toInt(); //write G forces to integer
+		//convert message to values
 		String  Gforce = getValue(message,';',0);
+		String GamePaused = getValue(message,';',1);
+		String GameRunning = getValue(message,';',2)
+		
+		//convert Gforce to integer for mapping to servo angle	
 		GFloat = Gforce.toFloat();
 		GFint = GFloat * 100;
-		//read games states
-		String GamePaused = getValue(message,';',1);
-		String GameRunning = getValue(message,';',2);
+		
 		//return states for debugging purposes
 		FlowSerialDebugPrintLn("Game Paused: " + GamePaused);
 		FlowSerialDebugPrintLn("Game Running: " + GameRunning);
 		
-		//maps servo angle to g forces, but only when in cockpit
+		//maps g forces to servo angle, but only when in cockpit
 		if(GamePaused == "0" and GameRunning == "1"){
 			angle = map(GFint,-1500,3000,0,180);	
 		}
@@ -82,11 +83,10 @@ public:
 		//write ouput to servo's
 		servo1.write(angle);
 		servo2.write(angle);
+		
 		//return values for debugging purposes
 		FlowSerialDebugPrintLn("Gforce value: " + String(GFloat));
 		FlowSerialDebugPrintLn("Motor Angle: " + String(angle));
-	
-			
 	
 		/*
 		// -------------------------------------------------------
@@ -121,7 +121,7 @@ public:
 	void idle() {
 	}
 	
-//stackoverflow.com/questions/9072320/split-string-into-string-array  //function to split string into values
+//stackoverflow.com/questions/9072320/split-string-into-string-array  //function to split string into seperate values
 String getValue(String data, char separator, int index)
 {
   int found = 0;
